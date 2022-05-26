@@ -2,10 +2,11 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Alura.LeilaoOnline.WebApp.Models;
+using Alura.LeilaoOnline.WebApp.Dados.EfCore.Interfaces;
 
-namespace Alura.LeilaoOnline.WebApp.Dados
+namespace Alura.LeilaoOnline.WebApp.Dados.EfCore
 {
-    public class AuctionsDao
+    public class AuctionsDao : IAuctionsDao
     {
         private readonly AppDbContext _appDbContext;
 

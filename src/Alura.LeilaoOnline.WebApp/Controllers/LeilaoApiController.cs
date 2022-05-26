@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Alura.LeilaoOnline.WebApp.Models;
-using Alura.LeilaoOnline.WebApp.Dados;
+using Alura.LeilaoOnline.WebApp.Dados.EfCore.Interfaces;
 
 namespace Alura.LeilaoOnline.WebApp.Controllers
 {
@@ -8,10 +8,10 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
     [Route("/api/leiloes")]
     public class LeilaoApiController : ControllerBase
     {
-        private readonly AuctionsDao _auctionsDao;
-        public LeilaoApiController()
+        private readonly IAuctionsDao _auctionsDao;
+        public LeilaoApiController(IAuctionsDao auctionsDao)
         {
-            _auctionsDao = new AuctionsDao();
+            _auctionsDao = auctionsDao;
         }
 
         [HttpGet]

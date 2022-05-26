@@ -1,6 +1,6 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Alura.LeilaoOnline.WebApp.Dados;
+using Alura.LeilaoOnline.WebApp.Dados.EfCore.Interfaces;
 using Alura.LeilaoOnline.WebApp.Models;
 using System;
 
@@ -8,11 +8,11 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
 {
     public class LeilaoController : Controller
     {
-        private readonly AuctionsDao _auctionsDao;
+        private readonly IAuctionsDao _auctionsDao;
 
-        public LeilaoController()
+        public LeilaoController(IAuctionsDao auctionsDao)
         {
-            _auctionsDao = new AuctionsDao();
+            _auctionsDao = auctionsDao;
         }
 
         public IActionResult Index()
