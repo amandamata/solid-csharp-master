@@ -9,10 +9,13 @@ namespace Alura.LeilaoOnline.WebApp.Services
     public class AdminService : IAdminService
     {
         private readonly IAuctionsDao _auctionsDao;
+        private readonly ICategoriesDao _categoriesDao;
 
-        public AdminService(IAuctionsDao auctionsDao)
+
+        public AdminService(IAuctionsDao auctionsDao, ICategoriesDao categoriesDao)
         {
             _auctionsDao = auctionsDao;
+            _categoriesDao = categoriesDao;
         }
 
         public void Add(Leilao auction)
@@ -35,22 +38,22 @@ namespace Alura.LeilaoOnline.WebApp.Services
 
         public Leilao SearchById(int id)
         {
-            return _auctionsDao.SearchById(id);
+            return _auctionsDao.GetById(id);
         }
 
         public IEnumerable<Leilao> SearchAuctions()
         {
-            return _auctionsDao.SearchAuctions();
+            return _auctionsDao.GetAll();
         }
 
         public IEnumerable<Categoria> SearchCategories()
         {
-            return _auctionsDao.SearchCategories();
+            return _categoriesDao.GetAll();
         }
 
         public void StartTradingById(int id)
         {
-            var auction = _auctionsDao.SearchById(id);
+            var auction = _auctionsDao.GetById(id);
             if (auction != null && auction.Situacao == SituacaoLeilao.Rascunho)
             {
                 auction.Situacao = SituacaoLeilao.Pregao;
@@ -61,7 +64,7 @@ namespace Alura.LeilaoOnline.WebApp.Services
 
         public void EndTradingById(int id)
         {
-            var auction = _auctionsDao.SearchById(id);
+            var auction = _auctionsDao.GetById(id);
             if (auction != null && auction.Situacao == SituacaoLeilao.Pregao)
             {
                 auction.Situacao = SituacaoLeilao.Finalizado;

@@ -11,10 +11,11 @@ namespace Alura.LeilaoOnline.WebApp
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ICategoriesDao, CategoriesDao>();
+            services.AddTransient<IAuctionsDao, AuctionsDao>();
             services.AddTransient<IAdminService, AdminServiceLogicExclusion>();
             services.AddTransient<IProductService, ProductService>();
-            //services.AddTransient<ICategoriesDao, CategoriesDao>();
-            services.AddTransient<IAuctionsDao, AuctionsDao>();
+            services.AddDbContext<AppDbContext>();
 
             services
                 .AddControllersWithViews()

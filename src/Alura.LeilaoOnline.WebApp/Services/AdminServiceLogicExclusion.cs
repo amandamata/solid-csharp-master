@@ -10,9 +10,9 @@ namespace Alura.LeilaoOnline.WebApp.Services
     {
         private readonly IAdminService _adminService;
 
-        public AdminServiceLogicExclusion(IAuctionsDao auctionsDao)
+        public AdminServiceLogicExclusion(IAuctionsDao auctionsDao, ICategoriesDao categoriesDao)
         {
-            _adminService = new AdminService(auctionsDao);
+            _adminService = new AdminService(auctionsDao, categoriesDao);
         }
 
         public void Add(Leilao auction)

@@ -15,17 +15,12 @@ namespace Alura.LeilaoOnline.WebApp.Dados.EfCore
             _appDbContext = new AppDbContext();
         }
 
-        public IEnumerable<Leilao> SearchAuctions()
+        public IEnumerable<Leilao> GetAll()
         {
             return _appDbContext.Leiloes.Include(l => l.Categoria).ToList();
         }
 
-        public IEnumerable<Categoria> SearchCategories()
-        {
-            return _appDbContext.Categorias;
-        }
-
-        public Leilao SearchById(int id)
+        public Leilao GetById(int id)
         {
             return _appDbContext.Leiloes.First(l => l.Id == id);
         }
