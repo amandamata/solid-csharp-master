@@ -1,5 +1,7 @@
 using Alura.LeilaoOnline.WebApp.Dados.EfCore;
 using Alura.LeilaoOnline.WebApp.Dados.EfCore.Interfaces;
+using Alura.LeilaoOnline.WebApp.Services;
+using Alura.LeilaoOnline.WebApp.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,8 +11,10 @@ namespace Alura.LeilaoOnline.WebApp
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddTransient<IAuctionsDao, AuctionsDao>();
+            services.AddTransient<IAdminService, AdminServiceLogicExclusion>();
+            services.AddTransient<IProductService, ProductService>();
+            //services.AddTransient<ICategoriesDao, CategoriesDao>();
+            services.AddTransient<IAuctionsDao, AuctionsDao>();
 
             services
                 .AddControllersWithViews()

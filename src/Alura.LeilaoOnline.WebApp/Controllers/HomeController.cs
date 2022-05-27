@@ -1,15 +1,15 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Alura.LeilaoOnline.WebApp.Dados;
 using Alura.LeilaoOnline.WebApp.Models;
 using Microsoft.AspNetCore.Routing;
+using Alura.LeilaoOnline.WebApp.Dados.EfCore;
 
 namespace Alura.LeilaoOnline.WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        AppDbContext _context;
+        private readonly AppDbContext _context;
 
         public HomeController()
         {
@@ -25,9 +25,9 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
                     Id = c.Id,
                     Descricao = c.Descricao,
                     Imagem = c.Imagem,
-                    EmRascunho = c.Leiloes.Where(l => l.Situacao == SituacaoLeilao.Rascunho).Count(),
-                    EmPregao = c.Leiloes.Where(l => l.Situacao == SituacaoLeilao.Pregao).Count(),
-                    Finalizados = c.Leiloes.Where(l => l.Situacao == SituacaoLeilao.Finalizado).Count(),
+                    EmRascunho = c.Leiloes.Count(l => l.Situacao == SituacaoLeilao.Rascunho),
+                    EmPregao = c.Leiloes.Count(l => l.Situacao == SituacaoLeilao.Pregao),
+                    Finalizados = c.Leiloes.Count(l => l.Situacao == SituacaoLeilao.Finalizado),
                 });
             return View(categorias);
         }

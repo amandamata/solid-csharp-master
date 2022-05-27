@@ -5,9 +5,9 @@ namespace Alura.LeilaoOnline.WebApp.Dados.EfCore.Interfaces
 {
     public interface IAuctionsDao
     {
-        IEnumerable<Categoria> SearchCategories();
-
         IEnumerable<Leilao> SearchAuctions();
+
+        IEnumerable<Categoria> SearchCategories();
 
         Leilao SearchById(int id);
 

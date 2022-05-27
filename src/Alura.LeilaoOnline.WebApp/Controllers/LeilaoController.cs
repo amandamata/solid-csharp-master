@@ -1,30 +1,30 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Alura.LeilaoOnline.WebApp.Dados.EfCore.Interfaces;
 using Alura.LeilaoOnline.WebApp.Models;
 using System;
+using Alura.LeilaoOnline.WebApp.Services.Interfaces;
 
 namespace Alura.LeilaoOnline.WebApp.Controllers
 {
     public class LeilaoController : Controller
     {
-        private readonly IAuctionsDao _auctionsDao;
+        private readonly IAdminService _adminService;
 
-        public LeilaoController(IAuctionsDao auctionsDao)
+        public LeilaoController(IAdminService adminService)
         {
-            _auctionsDao = auctionsDao;
+            _adminService = adminService;
         }
 
         public IActionResult Index()
         {
-            var leiloes = _auctionsDao.SearchAuctions();
+            var leiloes = _adminService.SearchAuctions();
             return View(leiloes);
         } 
 
         [HttpGet]
         public IActionResult Insert()
         {
-            ViewData["Categorias"] = _auctionsDao.SearchCategories();
+            ViewData["Categorias"] = _adminService.SearchCategories();
             ViewData["Operacao"] = "Inclusão";
             return View("Form");
         }
@@ -34,10 +34,10 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _auctionsDao.Add(model);
+                _adminService.Add(model);
                 return RedirectToAction("Index");
             }
-            ViewData["Categorias"] = _auctionsDao.SearchCategories();
+            ViewData["Categorias"] = _adminService.SearchCategories();
             ViewData["Operacao"] = "Inclusão";
             return View("Form", model);
         }
@@ -45,9 +45,9 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            ViewData["Categorias"] = _auctionsDao.SearchCategories();
+            ViewData["Categorias"] = _adminService.SearchCategories();
             ViewData["Operacao"] = "Edição";
-            var leilao = _auctionsDao.SearchById(id);
+            var leilao = _adminService.SearchById(id);
             if (leilao == null) return NotFound();
             return View("Form", leilao);
         }
@@ -57,10 +57,10 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _auctionsDao.Update(model);
+                _adminService.Update(model);
                 return RedirectToAction("Index");
             }
-            ViewData["Categorias"] = _auctionsDao.SearchCategories();
+            ViewData["Categorias"] = _adminService.SearchCategories();
             ViewData["Operacao"] = "Edição";
             return View("Form", model);
         }
@@ -68,34 +68,34 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
         [HttpPost]
         public IActionResult Inicia(int id)
         {
-            var leilao = _auctionsDao.SearchById(id);
+            var leilao = _adminService.SearchById(id);
             if (leilao == null) return NotFound();
             if (leilao.Situacao != SituacaoLeilao.Rascunho) return StatusCode(405);
             leilao.Situacao = SituacaoLeilao.Pregao;
             leilao.Inicio = DateTime.Now;
-            _auctionsDao.Update(leilao);
+            _adminService.Update(leilao);
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public IActionResult Finaliza(int id)
         {
-            var leilao = _auctionsDao.SearchById(id);
+            var leilao = _adminService.SearchById(id);
             if (leilao == null) return NotFound();
             if (leilao.Situacao != SituacaoLeilao.Pregao) return StatusCode(405);
             leilao.Situacao = SituacaoLeilao.Finalizado;
             leilao.Termino = DateTime.Now;
-            _auctionsDao.Update(leilao);
+            _adminService.Update(leilao);
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public IActionResult Remove(int id)
         {
-            var leilao = _auctionsDao.SearchById(id);
+            var leilao = _adminService.SearchById(id);
             if (leilao == null) return NotFound();
             if (leilao.Situacao == SituacaoLeilao.Pregao) return StatusCode(405);
-            _auctionsDao.Remove(leilao);
+            _adminService.Remove(leilao);
             return NoContent();
         }
 
@@ -103,7 +103,7 @@ namespace Alura.LeilaoOnline.WebApp.Controllers
         public IActionResult Pesquisa(string termo)
         {
             ViewData["termo"] = termo;
-            var leiloes = _auctionsDao.SearchAuctions()
+            var leiloes = _adminService.SearchAuctions()
                     .Where(l => string.IsNullOrWhiteSpace(termo) || 
                     l.Titulo.ToUpper().Contains(termo.ToUpper()) || 
                     l.Descricao.ToUpper().Contains(termo.ToUpper()) ||
